@@ -29,7 +29,7 @@ repositories {
     }
 }
 
-//    mainClassName = "com.benjishults.exteg.MainKt"
+mainClassName = "com.benjishults.exteg.MainKt"
 
 compileKotlin {
     kotlinOptions {
