@@ -1,7 +1,7 @@
-package com.benjishults.exteg
+package com.benjishults.exteg.http
 
 import io.vertx.core.json.JsonObject
 
-interface CommentValidator {
+interface Validator {
     fun validate(message: JsonObject): Boolean
 }
