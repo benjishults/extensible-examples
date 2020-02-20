@@ -220,7 +220,7 @@ The code you would write in (e.g.) Spring would be almost identical.
 Now the product folks come along and tell you that they have a new type of message they want us to handle.
 
 1. Validation: An entity of type `typo` must have a `case` value of `suit`.
-2. Processing: The processing of an entity of type `type1` should result in the return value of `dressing applied`.
+2. Processing: The processing of an entity of type `typo` should result in the return value of `dressing applied`.
 
 ### Add the new feature without editing any existing code other than configuration code
 
