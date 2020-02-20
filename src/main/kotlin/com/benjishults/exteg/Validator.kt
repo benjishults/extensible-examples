@@ -1,4 +1,4 @@
-package com.benjishults.exteg.http
+package com.benjishults.exteg
 
 import io.vertx.core.json.JsonObject
 

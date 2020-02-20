@@ -2,8 +2,8 @@ package com.benjishults.exteg.comment.http
 
 import com.benjishults.exteg.config.AbstractBeanRegistry
 import com.benjishults.exteg.http.EndpointConfig
-import com.benjishults.exteg.http.Processor
-import com.benjishults.exteg.http.Validator
+import com.benjishults.exteg.Processor
+import com.benjishults.exteg.Validator
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.BodyHandler
 

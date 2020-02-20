@@ -1,6 +1,6 @@
 package com.benjishults.exteg.comment.case1
 
-import com.benjishults.exteg.http.Validator
+import com.benjishults.exteg.Validator
 import io.vertx.core.json.JsonObject
 
 /**
