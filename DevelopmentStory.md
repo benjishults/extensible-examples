@@ -90,7 +90,7 @@ interface Validator {
 We will write two implementations of each of those interfaces.
 These implementations are in the `com.benjishults.exteg.entity.case1` and `com.benjishults.exteg.entity.case2` packages.
 They are all the one-liners you would expect.
-The implementations are named `Case1Validator`, `Case2Validator`, `Case1Processor`, and `Case2Processor`
+The implementations are named `Type1Validator`, `Type2Validator`, `Type1Processor`, and `Type2Processor`
 
 ## Dependency Injection
 
@@ -104,8 +104,8 @@ object ValidatorsBeanRegistry : PayloadValidatorBeanRegistry() {
     init {
         // NOTE just bind beans with these names to your DI context
         //      e.g., in Spring, you would simply create beans with these names
-        put("postType1Validator", Case1Validator)
-        put("postType2Validator", Case2Validator)
+        put("postType1Validator", Type1Validator)
+        put("postType2Validator", Type2Validator)
     }
 }
 ```
@@ -121,8 +121,8 @@ object ProcessorsBeanRegistry : PayloadProcessorBeanRegistry() {
     init {
         // NOTE just bind beans with these names to your DI context
         //      e.g., in Spring, you would simply create beans with these names
-        put("postType1Processor", Case1Processor)
-        put("postType2Processor", Case2Processor)
+        put("postType1Processor", Type1Processor)
+        put("postType2Processor", Type2Processor)
     }
 }
 ```
