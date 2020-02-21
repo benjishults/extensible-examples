@@ -179,7 +179,10 @@ What's happening there?
 We get the payload as JSON and parse out the type.
 
 From the type, we ask the DI framework for the validator and processor for that type.
-(In a typical DI framework, this will come down to a hashtable lookup.)
+
+In a typical DI framework, this will come down to a hashtable lookup.
+
+There is no reflection here.
 
 ## DI bean lookup
 
@@ -217,16 +220,20 @@ It would be found by the `getBeanOrElse` function above.
 
 The code you would write in (e.g.) Spring would be almost identical.
 
+In Spring, this comes down to a hashtable lookup.  There is no reflection here.
+
 # Type 3
 
 Now the product folks come along and tell you that they have a new type of message they want us to handle.
 
-1. Validation: An entity of type `typo` must have a `case` value of `suit`.
-2. Processing: The processing of an entity of type `typo` should result in the return value of `dressing applied`.
+1. Validation: An entity of type `bigType` must have a `case` value of `large`.
+2. Processing: The processing of an entity of type `bigType` should result in the return value of `largeness handled`.
 
 ## Add the new feature without editing any existing code other than configuration code
 
-The only existing code we have to edit is `ValidatorsBeanRegistry` and `ProcessorsBeanRegistry`.
+Depending on the DI framework you are using, you may not have to edit any existing code to make this work!
+
+In our DI framework, the only existing code we have to edit is `ValidatorsBeanRegistry` and `ProcessorsBeanRegistry`.
 I.e., configuration code that adds new beans to the context.
 
 Other than that, we write a new, one-line implementation of `Processor` 
@@ -238,6 +245,6 @@ The only `if` statement in our code is for the validation check.  (And we really
 
 We are using design patterns: Behavioral patterns (template, strategy), builder patterns (factory method).
 
-This is all possible because of polymorphism.
+These patterns all use polymorphism.
 
 (In a functional language, this simplicity in design is also possible.  It's just done a bit differently.)
