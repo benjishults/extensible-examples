@@ -64,8 +64,6 @@ case 1 executed
 
 The code is all in this repo but this walk-through will skip details about, e.g., the web-framework and DI implementation.
 
-Also, we will just use a `JsonObject` class to deserialize the input rather than bringing in more dependencies.
-
 On my machine, the web service starts up in less than half a second.
 
 ## Validators and Processors
@@ -77,13 +75,13 @@ interface Processor {
     /**
      * @return the result of processing the message
      */
-    fun process(message: JsonObject): String
+    fun process(message: EntityDto): String
 }
 ```
 
 ```kotlin
 interface Validator {
-    fun validate(message: JsonObject): Boolean
+    fun validate(message: EntityDto): Boolean
 }
 ```
 
