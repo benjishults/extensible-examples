@@ -1,4 +1,4 @@
-package com.benjishults.exteg.comment.http
+package com.benjishults.exteg.entity.http
 
 import com.benjishults.exteg.config.AbstractBeanRegistry
 import com.benjishults.exteg.http.EndpointConfig
@@ -7,12 +7,12 @@ import com.benjishults.exteg.Validator
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.BodyHandler
 
-private val commentPath = "/comment"
+private val entityPath = "/entity"
 
-class CommentEndpointConfig(
+class EntityEndpointConfig(
         private val validators: AbstractBeanRegistry<Validator>,
         private val processors: AbstractBeanRegistry<Processor>,
-        private val path: String = commentPath
+        private val path: String = entityPath
 ) : EndpointConfig {
 
     override fun addRoutes(router: Router) {

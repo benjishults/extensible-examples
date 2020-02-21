@@ -1,8 +1,8 @@
 package com.benjishults.exteg
 
-import com.benjishults.exteg.comment.config.ProcessorsBeanRegistry
-import com.benjishults.exteg.comment.config.ValidatorsBeanRegistry
-import com.benjishults.exteg.comment.http.CommentEndpointConfig
+import com.benjishults.exteg.entity.config.ProcessorsBeanRegistry
+import com.benjishults.exteg.entity.config.ValidatorsBeanRegistry
+import com.benjishults.exteg.entity.http.EntityEndpointConfig
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServerOptions
 
@@ -12,7 +12,7 @@ fun main() {
             .setHost("localhost")
             .setPort(8989)
     ).requestHandler { request ->
-        CommentEndpointConfig(ValidatorsBeanRegistry, ProcessorsBeanRegistry)
+        EntityEndpointConfig(ValidatorsBeanRegistry, ProcessorsBeanRegistry)
                 .router(vertx)
                 .handle(request)
     }.listen()

@@ -1,72 +1,74 @@
-## Problem
+# Problem
 
-We are writing a simple rest service with just a `POST` endpoint.
+Our clients want us to validate and process entities.
 
-The payload is JSON with two properties: `type` and `case`.
-
-Payloads with different types need to be handled in quite different ways.
-
-We know about two type values now but the business tells us to expect that other types will
-be coming.
-
-### Extra challenge
-
-Solve this in a way that we can later add code to handle new types without editing any
-existing code except, maybe, configuration code.
-
-## Details
+## Functional requirements
 
 The two known types of entities: `type1` and `type2`.  The business gives us rules for
 validation and processing of the two types of entities.
 
-For the sake of keeping the details very simple, let's say we get this:
+For the sake of keeping the details very simple, let's say we get these business requirements:
 
 1. Validation: An entity of type `type1` must have a `case` value of `case1`.
 1. Validation: An entity of type `type2` must have a `case` value of `case2`.
 2. Processing: The processing of an entity of type `type1` should result in the return value of `case 1 executed`.
 2. Processing: The processing of an entity of type `type2` should result in the return value of `case 2 executed`.
 3. Any other type should result in an error.
-4. Design in a way that anticipates more types being possible in the future.
+4. All types of entities come in through the same channel.
 
-We decide to use HTTP POST to allow clients to send us the entities.
-We will write a server so that the following session will occur:
+## Non-Functional requirements
+
+1. Design in a way that anticipates additional types,
+with their own validation and processing requirements,
+being possible in the future.
+
+# Solution
+
+We decide to use HTTP POST to allow clients to send us the entities.  The payload will look like this:
+
+```json5
+{
+  "type": "<type value>",
+  "case": "<case value>"
+}
+```
+
+We will write a server so that the following session would occur:
 
 ```
-$ curl http://localhost:8989/comment -d '{"type":"mess","case":"case2"}' -i
+$ curl http://localhost:8989/entity -d '{"type":"mess","case":"case2"}' -i
 HTTP/1.1 422 Unprocessable Entity: No Validator found for verb=post noun=mess.
 content-length: 0
 
-$ curl http://localhost:8989/comment -d '{"type":"type1","case":"case2"}' -i
+$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case2"}' -i
 HTTP/1.1 400 Bad Request: Invalid payload for type type1.
 content-length: 0
 
-$ curl http://localhost:8989/comment -d '{"type":"type2","case":"case1"}' -i
+$ curl http://localhost:8989/entity -d '{"type":"type2","case":"case1"}' -i
 HTTP/1.1 400 Bad Request: Invalid payload for type type2.
 content-length: 0
 
-$ curl http://localhost:8989/comment -d '{"type":"type2","case":"case2"}' -i
+$ curl http://localhost:8989/entity -d '{"type":"type2","case":"case2"}' -i
 HTTP/1.1 200 OK
 content-length: 15
 
 case 2 executed
-$ curl http://localhost:8989/comment -d '{"type":"type1","case":"case1"}' -i
+$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1"}' -i
 HTTP/1.1 200 OK
 content-length: 15
 
 case 1 executed
 ```
 
-## Solution
+## Keep focus
 
-### Keep focus
+The code is all in this repo but this walk-through will skip details about, e.g., the web-framework and DI implementation.
 
-The code is all here but this walk-through will skip details about, e.g., the web-framework and DI implementation.
-
-Also, we will just use a JsonObject class to deserialize the input rather than bringing in more dependencies.
+Also, we will just use a `JsonObject` class to deserialize the input rather than bringing in more dependencies.
 
 On my machine, the web service starts up in less than half a second.
 
-### Validators and Processors
+## Validators and Processors
 
 Here are our two interfaces.
 
@@ -86,11 +88,11 @@ interface Validator {
 ```
 
 We will write two implementations of each of those interfaces.
-These implementations are in the `com.benjishults.exteg.comment.case1` and `com.benjishults.exteg.comment.case2` packages.
+These implementations are in the `com.benjishults.exteg.entity.case1` and `com.benjishults.exteg.entity.case2` packages.
 They are all the one-liners you would expect.
 The implementations are named `Case1Validator`, `Case2Validator`, `Case1Processor`, and `Case2Processor`
 
-### Dependency Injection
+## Dependency Injection
 
 In order to keep things simple, I've written a very simple dependency injection "framework".
 You can look at the details if you want, but here is what you need to know.
@@ -129,17 +131,17 @@ You can see that I have beans in the DI context implementing each of the two typ
 
 The bean naming convention will be important later.
 
-### Endpoint implementation
+## Endpoint implementation
 
 Here is the endpoint implementation:
 
 ```kotlin
-private val commentPath = "/comment"
+private val entityPath = "/entity"
 
-class CommentEndpointConfig(
+class EntityEndpointConfig(
         private val validators: AbstractBeanRegistry<Validator>,
         private val processors: AbstractBeanRegistry<Processor>,
-        private val path: String = commentPath
+        private val path: String = entityPath
 ) : EndpointConfig {
 
     override fun addRoutes(router: Router) {
@@ -179,7 +181,7 @@ We get the payload as JSON and parse out the type.
 From the type, we ask the DI framework for the validator and processor for that type.
 (In a typical DI framework, this will come down to a hashtable lookup.)
 
-### DI bean lookup
+## DI bean lookup
 
 But how does the DI framework know which implementation of `Validator` or `Processor` to give us?
 It's a simple naming convention for the bean names.  You can implement this easily in any major DI
@@ -215,14 +217,14 @@ It would be found by the `getBeanOrElse` function above.
 
 The code you would write in (e.g.) Spring would be almost identical.
 
-## Type 3
+# Type 3
 
 Now the product folks come along and tell you that they have a new type of message they want us to handle.
 
 1. Validation: An entity of type `typo` must have a `case` value of `suit`.
 2. Processing: The processing of an entity of type `typo` should result in the return value of `dressing applied`.
 
-### Add the new feature without editing any existing code other than configuration code
+## Add the new feature without editing any existing code other than configuration code
 
 The only existing code we have to edit is `ValidatorsBeanRegistry` and `ProcessorsBeanRegistry`.
 I.e., configuration code that adds new beans to the context.
@@ -230,7 +232,7 @@ I.e., configuration code that adds new beans to the context.
 Other than that, we write a new, one-line implementation of `Processor` 
 and a new, one-line implementation of `Validator`.
 
-## Things to notice about our code
+# Things to notice about our code
 
 The only `if` statement in our code is for the validation check.  (And we really don't even need an if there.)
 
