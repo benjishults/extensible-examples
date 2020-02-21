@@ -1,7 +1,7 @@
 package com.benjishults.exteg
 
-import io.vertx.core.json.JsonObject
+import com.benjishults.exteg.entity.EntityDto
 
 interface Validator {
-    fun validate(message: JsonObject): Boolean
+    fun validate(message: EntityDto): Boolean
 }

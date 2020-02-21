@@ -1,13 +1,13 @@
 package com.benjishults.exteg.entity.case2
 
 import com.benjishults.exteg.Validator
-import io.vertx.core.json.JsonObject
+import com.benjishults.exteg.entity.EntityDto
 
 /**
  * Ensure the Case 2 conditions are satisfied
  */
 object Type2Validator : Validator {
-    override fun validate(message: JsonObject): Boolean {
-        return message.map["case"] == "case2"
+    override fun validate(message: EntityDto): Boolean {
+        return message.case == "case2"
     }
 }
