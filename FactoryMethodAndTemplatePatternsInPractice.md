@@ -87,8 +87,8 @@ interface Validator {
 
 We will write two implementations of each of those interfaces.
 These implementations are in 
-the [`com.benjishults.exteg.entity.case1`](src/kotlin/com/benjishults/exteg/entity/case1)
-and [`com.benjishults.exteg.entity.case2`](src/kotlin/com/benjishults/exteg/entity/case2)
+the [`com.benjishults.exteg.entity.case1`](src/main/kotlin/com/benjishults/exteg/entity/case1)
+and [`com.benjishults.exteg.entity.case2`](src/main/kotlin/com/benjishults/exteg/entity/case2)
 packages.  They are all the one-liners you would expect.
 The implementations are named
 [`Type1Validator`](src/main/kotlin/com/benjishults/exteg/entity/case1/Type1Validator.kt),
@@ -188,8 +188,8 @@ There is no reflection here.
 ## DI bean lookup
 
 But how does the DI framework know which implementation of
-[`Validator`](src/kotlin/com/benjishults/exteg/Validator.kt) or
-[`Processor`](src/kotlin/com/benjishults/exteg/Processor.kt) to give us?
+[`Validator`](src/main/kotlin/com/benjishults/exteg/Validator.kt) or
+[`Processor`](src/main/kotlin/com/benjishults/exteg/Processor.kt) to give us?
 It's a simple naming convention for the bean names.  You can implement this easily in any major DI
 framework.  Regardless of the DI framework, the code will resemble this:
 
@@ -242,9 +242,9 @@ In our DI framework, the only existing code we have to edit is
 I.e., configuration code that adds new beans to the context.
 
 Other than that, we write a new, one-line implementation of
-[`Processor`](src/kotlin/com/benjishults/exteg/Processor.kt) 
+[`Processor`](src/main/kotlin/com/benjishults/exteg/Processor.kt) 
 and a new, one-line implementation of
-[`Validator`](src/kotlin/com/benjishults/exteg/Validator.kt).
+[`Validator`](src/main/kotlin/com/benjishults/exteg/Validator.kt).
 
 # Things to notice about our code
 
