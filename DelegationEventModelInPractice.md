@@ -16,18 +16,47 @@ They want us to add the new features but be aware that more processing functiona
 1. When processing an entity of thpe `type1`, we want to execute another step that adds a line to the output: `feature 1`.
 1. When processing an entity of thpe `type1`, we want to execute another step that adds a line to the output: `feature 2`
 unless the value of the `options` property contains `skipF2`.
-2. Expect more, similar requirements to come specifying added, optional features.
+2. Expect more, similar requirements to come specifying added, optional features.  The optional features will
+be conditional on the `options` property of the entity.
 
 ## Non-Functional requirements
 
-1. Design in a way that anticipates additional optional features..
+1. Design in a way that anticipates additional optional features that may be conditional
+on the `options` property of the entity.
 
 # Solution
 
-We will extend [what we did before](FactoryMethodAndTemplatePatternsInPractice.md).  We will edit the `Type1Processor` because
-the requirements for its behavior have changed.  But, we will change it in a way that will not require us to edit again
-when the new features come along.  (In fact, we will create a new Type1 Processor named `Type1Processor2` so that we can
-keep both in the repo.)
+After this change, we want to see this:
+
+```
+$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1"}' -i
+HTTP/1.1 200 OK
+content-length: 35
+
+case 1 executed
+feature 1
+feature 2
+$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1","options":["skipF2"]}' -i
+HTTP/1.1 200 OK
+content-length: 25
+
+case 1 executed
+feature 1
+```
+
+Notice that passing the `skipF2` option disables feature 2.
+
+## Unanticipated requirement changes
+
+We have a requirements change that we were not told to anticipate.  Thus, we will end up making
+a change to an existing, non-configuration source code file.  To be specific, we will edit the `Type1Processor` class.
+
+However, once we're done with it, we not want to have to edit it again when more of these "features" requirements
+come along.
+
+We will extend [what we did before](FactoryMethodAndTemplatePatternsInPractice.md).  (Because I want to keep the existing
+`Type1Processor` in this code repo, we will create a new Type1 Processor named `Type1Processor2`.  In real life, we would
+edit the existing file.)
 
 ## The Delegation Event Model
 
@@ -39,8 +68,8 @@ It consists of
 2. a listener interface and any number of implementations (the consumers)
 3. an event type (the message type)
 
-The event source allows implementations of the listener interface to register interest in its events.
-When the event occurs in the event source, it notifies all listeners.
+The event source (producer) allows implementations of the listener interface (the consumers) to register interest in its events.
+When the event occurs in the event source, it notifies all listeners (broadcasts to the topic).
 
 In our case, 
 
@@ -77,7 +106,8 @@ Here are the two feature implementations:
 ```kotlin
 class Feature1Executor : FeatureExecutor{
 
-    override fun executeFeature(obj: EntityDto, value: String) = "$value\nfeature 1"
+    override fun executeFeature(obj: EntityDto, value: String) =
+            "$value\nfeature 1"
 
     override fun isApplicable(options: List<String>) = true
 
@@ -87,7 +117,8 @@ class Feature1Executor : FeatureExecutor{
 ```kotlin
 class Feature2Executor : FeatureExecutor {
 
-    override fun executeFeature(obj: EntityDto, value: String) = "$value\nfeature 2"
+    override fun executeFeature(obj: EntityDto, value: String) =
+            "$value\nfeature 2"
 
     override fun isApplicable(options: List<String>) =
             "skipF2" !in options
@@ -148,25 +179,6 @@ interface ExtensibleProcessor : Processor {
 }
 ```
 
-Finally, we need a builder for our `Type1Processor2` because we want it to be immutable.
-
-```kotlin
-class Type1Processor2Builder {
-
-    private val featureExecutors: MutableList<FeatureExecutor> = mutableListOf()
-
-    fun registerListener(executor: FeatureExecutor) = this.also {
-        featureExecutors.add(executor)
-    }
-
-    fun removeListener(executor: FeatureExecutor) = this.also {
-        featureExecutors.remove(executor)
-    }
-
-    fun build() = Type1Processor2(featureExecutors)
-}
-```
-
 ### Wiring things together
 
 The wiring happens in configuration code.  Here are the changes.  (Again, instead of actually changing code, we will
@@ -193,26 +205,6 @@ to construct a processor and we register both our our listeners with that Proces
 
 After editing the `Main.kt` code to use this `ProcessorsBeanRegistry2` instead of the old `ProcessorsBeanRegistry`,
 the new code will become active.
-
-Running it, we can see this:
-
-```
-$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1"}' -i
-HTTP/1.1 200 OK
-content-length: 35
-
-case 1 executed
-feature 1
-feature 2%                                                                                                                                              
-$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1","options":["skipF2"]}' -i
-HTTP/1.1 200 OK
-content-length: 25
-
-case 1 executed
-feature 1%                
-```
-
-Notice that passing the `skipF2` option disables that feature.
 
 # Feature 3
 

@@ -135,6 +135,7 @@ Here is the endpoint implementation:
 
 ```kotlin
 private val entityPath = "/entity"
+private val mapper = jacksonObjectMapper()
 
 class EntityEndpointConfig(
         private val validators: AbstractBeanRegistry<Validator>,
@@ -145,19 +146,18 @@ class EntityEndpointConfig(
     override fun addRoutes(router: Router) {
         router.route(path).handler(BodyHandler.create())
         router.post(path).handler { routingContext ->
-            val obj = routingContext.bodyAsJson
-            val type = obj.map["type"] as String                            // get type from JSON payload
+            val entity = mapper.readValue(routingContext.bodyAsString, EntityDto::class.java)
             try {
-                val validator = validators.getBeanOrError("post", type)     // get validator from DI framework
-                if (validator.validate(obj)) {                              // validate
-                    val processor = processors.getBeanOrError("post", type) // get processor from DI framework
-                    val result = processor.process(obj)                     // process
-                    routingContext.response()
-                            .end(result)
+                val validator = validators.getBeanOrError("post", entity.type)     // get validator from DI framework     
+                if (validator.validate(entity)) {                                  // validate                            
+                    val processor = processors.getBeanOrError("post", entity.type) // get processor from DI framework
+                    val result = processor.process(entity)                         // process                        
+                    routingContext.response()                                      
+                            .end(result)                                           
                 } else {
                     routingContext.response()
                             .setStatusCode(400)
-                            .setStatusMessage("Bad Request: Invalid payload for type ${type}.")
+                            .setStatusMessage("Bad Request: Invalid payload for type ${entity.type}.")
                             .end()
                 }
             } catch (e: Exception) {
@@ -168,13 +168,10 @@ class EntityEndpointConfig(
             }
         }
     }
-
 }
 ```
 
 What's happening there?
-
-We get the payload as JSON and parse out the type.
 
 From the type, we ask the DI framework for the validator and processor for that type.
 

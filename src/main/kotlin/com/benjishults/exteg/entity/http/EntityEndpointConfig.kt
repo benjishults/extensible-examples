@@ -1,12 +1,11 @@
 package com.benjishults.exteg.entity.http
 
-import com.benjishults.exteg.config.AbstractBeanRegistry
-import com.benjishults.exteg.http.EndpointConfig
 import com.benjishults.exteg.Processor
 import com.benjishults.exteg.Validator
+import com.benjishults.exteg.config.AbstractBeanRegistry
 import com.benjishults.exteg.entity.EntityDto
+import com.benjishults.exteg.http.EndpointConfig
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import io.vertx.core.json.jackson.DatabindCodec
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.BodyHandler
 

@@ -6,6 +6,8 @@ interface FeatureExecutor {
 
     /**
      * Takes the entity and the result of processing so far and executes the feature on the two.
+     * This should be called only if [isApplicable]
+     * returns [true] when passed [obj.options].
      */
     fun executeFeature(obj: EntityDto, value: String): String
 
