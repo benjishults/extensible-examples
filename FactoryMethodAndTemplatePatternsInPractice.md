@@ -24,7 +24,7 @@ being possible in the future.
 
 # Solution
 
-We decide to use HTTP POST to allow clients to send us the entities.  The payload will look like this:
+We decide to use HTTP POST to allow clients to send us the entities.  The payload will [look like this](src/main/kotlin/com/benjishults/exteg/entity/EntityDto.kt):
 
 ```json5
 {
@@ -86,9 +86,15 @@ interface Validator {
 ```
 
 We will write two implementations of each of those interfaces.
-These implementations are in the `com.benjishults.exteg.entity.case1` and `com.benjishults.exteg.entity.case2` packages.
-They are all the one-liners you would expect.
-The implementations are named `Type1Validator`, `Type2Validator`, `Type1Processor`, and `Type2Processor`
+These implementations are in 
+the [`com.benjishults.exteg.entity.case1`](src/kotlin/com/benjishults/exteg/entity/case1)
+and [`com.benjishults.exteg.entity.case2`](src/kotlin/com/benjishults/exteg/entity/case2)
+packages.  They are all the one-liners you would expect.
+The implementations are named
+[`Type1Validator`](src/main/kotlin/com/benjishults/exteg/entity/case1/Type1Validator.kt),
+[`Type2Validator`](src/main/kotlin/com/benjishults/exteg/entity/case2/Type2Validator.kt),
+[`Type1Processor`](src/main/kotlin/com/benjishults/exteg/entity/case1/Type1Processor.kt), and
+[`Type2Processor`](src/main/kotlin/com/benjishults/exteg/entity/case2/Type2Processor.kt).
 
 ## Dependency Injection
 
@@ -181,7 +187,9 @@ There is no reflection here.
 
 ## DI bean lookup
 
-But how does the DI framework know which implementation of `Validator` or `Processor` to give us?
+But how does the DI framework know which implementation of
+[`Validator`](src/kotlin/com/benjishults/exteg/Validator.kt) or
+[`Processor`](src/kotlin/com/benjishults/exteg/Processor.kt) to give us?
 It's a simple naming convention for the bean names.  You can implement this easily in any major DI
 framework.  Regardless of the DI framework, the code will resemble this:
 
@@ -228,11 +236,15 @@ Now the product folks come along and tell you that they have a new type of messa
 
 Depending on the DI framework you are using, you may not have to edit any existing code to make this work!
 
-In our DI framework, the only existing code we have to edit is `ValidatorsBeanRegistry` and `ProcessorsBeanRegistry`.
+In our DI framework, the only existing code we have to edit is
+[`ValidatorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ValidationsBeanRegistry.kt) and 
+[`ProcessorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry.kt).
 I.e., configuration code that adds new beans to the context.
 
-Other than that, we write a new, one-line implementation of `Processor` 
-and a new, one-line implementation of `Validator`.
+Other than that, we write a new, one-line implementation of
+[`Processor`](src/kotlin/com/benjishults/exteg/Processor.kt) 
+and a new, one-line implementation of
+[`Validator`](src/kotlin/com/benjishults/exteg/Validator.kt).
 
 # Things to notice about our code
 

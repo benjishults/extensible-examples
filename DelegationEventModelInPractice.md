@@ -55,7 +55,8 @@ However, once we're done with it, we not want to have to edit it again when more
 come along.
 
 We will extend [what we did before](FactoryMethodAndTemplatePatternsInPractice.md).  (Because I want to keep the existing
-`Type1Processor` in this code repo, we will create a new Type1 Processor named `Type1Processor2`.  In real life, we would
+`Type1Processor` in this code repo, we will create a new Type1 Processor named
+[`Type1Processor2`](src/main/kotlin/com/benjishults/exteg/entity/case1/Type1Processor2.kt).  In real life, we would
 edit the existing file.)
 
 ## The Delegation Event Model
@@ -74,8 +75,10 @@ When the event occurs in the event source, it notifies all listeners (broadcasts
 In our case, 
 
 1. the event source will be the processor
-2. the listener interface will be called `FeatureExecutor` with an implementation for the two features we know about so far
-3. the event type will be a pair: an `EntityDto` and the result of processing so far
+2. the listener interface will be called [`FeatureExecutor`](src/main/kotlin/com/benjishults/exteg/FeatureExecutor.kt)
+with an implementation for the two features we know about so far
+3. the event type will be a pair: an [`EntityDto`](src/main/kotlin/com/benjishults/exteg/entity/EntityDto.kt)
+and the result of processing so far
 
 ### Listeners
 
@@ -130,7 +133,8 @@ Verify that these satisfy the business requirements.  (Of course, there are unit
 
 ### Event source
 
-Our `Type1Processor2` is the event source.  Here is its code
+Our [`Type1Processor2`](src/main/kotlin/com/benjishults/exteg/entity/case1/Type1Processor2.kt)
+is the event source.  Here is its code
 
 ```kotlin
 class Type1Processor2(override val featureExecutors: List<FeatureExecutor>) : ExtensibleProcessor {
@@ -139,14 +143,16 @@ class Type1Processor2(override val featureExecutors: List<FeatureExecutor>) : Ex
 }
 ```
 
-The only differences between `Type1Processor2` and `Type1Processor` are:
+The only differences between [`Type1Processor2`](src/main/kotlin/com/benjishults/exteg/entity/case1/Type1Processor2.kt)
+and [`Type1Processor`](src/main/kotlin/com/benjishults/exteg/entity/case1/Type1Processor.kt) are:
 
 1. the interface they implement
 2. the constructor now takes an argument
 2. the name of the method they overload
 
 Of course, the "magic" is happening in the interface it implements.
-Here is the template interface for the event source:
+Here is the [template interface](src/main/kotlin/com/benjishults/exteg/ExtensibleProcessor.kt)
+for the event source:
 
 ```kotlin
 interface ExtensibleProcessor : Processor {
@@ -181,7 +187,8 @@ interface ExtensibleProcessor : Processor {
 
 ### Wiring things together
 
-The wiring happens in configuration code.  Here are the changes.  (Again, instead of actually changing code, we will
+The wiring happens in [configuration code](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry2.kt).
+Here are the changes.  (Again, instead of actually changing code, we will
 create a new class so that we can keep both examples in the same code repo.)
 
 ```kotlin
@@ -200,18 +207,24 @@ object ProcessorsBeanRegistry2 : PayloadProcessorBeanRegistry() {
 }
 ```
 
-Notice the difference between this and the original `ProcessorsBeanRegistry`.  In this one, we use the builder
+Notice the difference between this and the original
+[`ProcessorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry.kt).
+In this one, we use the builder
 to construct a processor and we register both our our listeners with that Processor.
 
-After editing the `Main.kt` code to use this `ProcessorsBeanRegistry2` instead of the old `ProcessorsBeanRegistry`,
+After editing the `Main.kt` code to use this
+[`ProcessorsBeanRegistry2`](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry2.kt)
+instead of the old
+[`ProcessorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry.kt),
 the new code will become active.
 
 # Feature 3
 
 What do we have to do when the business comes along and asks us to add a new feature?
 
-1. Write a new implementation of `FeatureExecutor`
-2. Register that new instance with the `Type1Processor2` in configuration code
+1. Write a new implementation of [`FeatureExecutor`](src/main/kotlin/com/benjishults/exteg/FeatureExecutor.kt)
+2. Register that new instance with the `Type1Processor2` in
+[configuration code](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry2.kt)
 
 # Things to notice about our code
 
