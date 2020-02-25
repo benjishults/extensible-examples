@@ -1,23 +1,19 @@
 package com.benjishults.exteg
 
-import com.benjishults.exteg.config.AbstractBeanRegistry
-import com.benjishults.exteg.config.BeanRegistry
+import com.benjishults.exteg.config.MapBeanRegistry
 import com.benjishults.exteg.entity.case1.Type1Processor
 import com.benjishults.exteg.entity.case1.Type1Validator
 import com.benjishults.exteg.entity.case2.Type2Processor
 import com.benjishults.exteg.entity.case2.Type2Validator
 import com.benjishults.exteg.entity.config.ProcessorsBeanRegistry
 import com.benjishults.exteg.entity.config.ValidatorsBeanRegistry
-import com.benjishults.exteg.entity.http.EntityEndpointConfig
-import io.vertx.core.json.JsonObject
 import spock.lang.Specification
-import spock.lang.Subject
 import spock.lang.Unroll
 
 class BeanLookupSpec extends Specification {
 
-    private AbstractBeanRegistry<Validator> validatorBeanRegistry
-    private AbstractBeanRegistry<Processor> processorBeanRegistry
+    private MapBeanRegistry<Validator> validatorBeanRegistry
+    private MapBeanRegistry<Processor> processorBeanRegistry
 
     def setup() {
         validatorBeanRegistry = ValidatorsBeanRegistry.INSTANCE

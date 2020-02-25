@@ -1,8 +1,9 @@
 package com.benjishults.exteg.config
 
-abstract class AbstractBeanRegistry<T> : SimpleMapBeanRegistry<T>() {
+interface MapBeanRegistry<T> : BeanRegistry<T> {
 
-    abstract val suffix: String
+    val map: Map<String, T>
+    val suffix: String
 
     fun getBeanOrError(verb: String, noun: String): T =
             getBeanOrElse(verb, noun) {
@@ -10,7 +11,7 @@ abstract class AbstractBeanRegistry<T> : SimpleMapBeanRegistry<T>() {
             }
 
     override fun getBeanOrElse(verb: String, noun: String, default: () -> T): T =
-            getOrElse(buildString {
+            map.getOrElse(buildString {
                 append(verb.toLowerCase())
                 append(noun.capitalize())
                 append(suffix)

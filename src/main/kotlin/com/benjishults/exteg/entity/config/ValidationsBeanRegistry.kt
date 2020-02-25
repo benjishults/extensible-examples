@@ -8,7 +8,7 @@ object ValidatorsBeanRegistry : PayloadValidatorBeanRegistry() {
     init {
         // NOTE just bind beans with these names to your DI context
         //      e.g., in Spring, you would simply create beans with these names
-        put("postType1Validator", Type1Validator)
-        put("postType2Validator", Type2Validator)
+        map["postType1Validator"] = Type1Validator
+        map["postType2Validator"] = Type2Validator
     }
 }

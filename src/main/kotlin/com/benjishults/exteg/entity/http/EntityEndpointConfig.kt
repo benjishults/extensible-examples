@@ -2,7 +2,7 @@ package com.benjishults.exteg.entity.http
 
 import com.benjishults.exteg.Processor
 import com.benjishults.exteg.Validator
-import com.benjishults.exteg.config.AbstractBeanRegistry
+import com.benjishults.exteg.config.MapBeanRegistry
 import com.benjishults.exteg.entity.EntityDto
 import com.benjishults.exteg.http.EndpointConfig
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -13,8 +13,8 @@ private val entityPath = "/entity"
 private val mapper = jacksonObjectMapper()
 
 class EntityEndpointConfig(
-        private val validators: AbstractBeanRegistry<Validator>,
-        private val processors: AbstractBeanRegistry<Processor>,
+        private val validators: MapBeanRegistry<Validator>,
+        private val processors: MapBeanRegistry<Processor>,
         private val path: String = entityPath
 ) : EndpointConfig {
 

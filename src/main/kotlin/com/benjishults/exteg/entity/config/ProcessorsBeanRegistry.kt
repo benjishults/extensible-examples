@@ -8,7 +8,7 @@ object ProcessorsBeanRegistry : PayloadProcessorBeanRegistry() {
     init {
         // NOTE just bind beans with these names to your DI context
         //      e.g., in Spring, you would simply create beans with these names
-        put("postType1Processor", Type1Processor)
-        put("postType2Processor", Type2Processor)
+        map["postType1Processor"] = Type1Processor
+        map["postType2Processor"] = Type2Processor
     }
 }
