@@ -17,3 +17,9 @@ You should not need to edit any existing code (other than configuration code).
 
 To add a new feature to type1, simply implement the `FeatureExecutor` interface and register
 an instance of your class during the configuration of the `Type1Processor`.
+
+## Walkthroughs of problems and approach
+
+[Initial problem solved with factory method, etc](FactoryMethodAndTemplatePatternsInPractice.md).
+
+[Second problem solved with delegation event model, etc](DelegationEventModelInPractice.md).
