@@ -33,14 +33,14 @@ $ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1"}' -i
 HTTP/1.1 200 OK
 content-length: 35
 
-case 1 executed
+case1 executed - type 1
 feature 1
 feature 2
 $ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1","options":["skipF2"]}' -i
 HTTP/1.1 200 OK
 content-length: 25
 
-case 1 executed
+case1 executed - type 1
 feature 1
 ```
 
@@ -139,7 +139,7 @@ is the event source.  Here is its code
 ```kotlin
 class Type1Processor2(override val featureExecutors: List<FeatureExecutor>) : ExtensibleProcessor {
     override fun doMainProcessing(message: EntityDto) =
-            "case 1 executed"
+            "${message.case} executed - type 1"
 }
 ```
 

@@ -9,10 +9,10 @@ validation and processing of the two types of entities.
 
 For the sake of keeping the details very simple, let's say we get these business requirements:
 
-1. Validation: An entity of type `type1` must have a `case` value of `case1`.
-1. Validation: An entity of type `type2` must have a `case` value of `case2`.
-2. Processing: The processing of an entity of type `type1` should result in the return value of `case 1 executed`.
-2. Processing: The processing of an entity of type `type2` should result in the return value of `case 2 executed`.
+1. Validation: An entity of type `type1` must have a `case` value that starts with `case1`.
+1. Validation: An entity of type `type2` must have a `case` value that starts with `case2`.
+2. Processing: The processing of an entity of type `type1` should result in the return value of `<case> executed - type 1`.
+2. Processing: The processing of an entity of type `type2` should result in the return value of `Type 2 <case> executed`.
 3. Any other type should result in an error.
 4. All types of entities come in through the same channel.
 
@@ -37,7 +37,7 @@ We will write a server so that the following session would occur:
 
 ```
 $ curl http://localhost:8989/entity -d '{"type":"mess","case":"case2"}' -i
-HTTP/1.1 422 Unprocessable Entity: No Validator found for verb=post noun=mess.
+HTTP/1.1 422 Unprocessable Entity: No Validator found for verb=post type=mess.
 content-length: 0
 
 $ curl http://localhost:8989/entity -d '{"type":"type1","case":"case2"}' -i
@@ -48,16 +48,16 @@ $ curl http://localhost:8989/entity -d '{"type":"type2","case":"case1"}' -i
 HTTP/1.1 400 Bad Request: Invalid payload for type type2.
 content-length: 0
 
-$ curl http://localhost:8989/entity -d '{"type":"type2","case":"case2"}' -i
+$ curl http://localhost:8989/entity -d '{"type":"type2","case":"case2a"}' -i
 HTTP/1.1 200 OK
 content-length: 15
 
-case 2 executed
-$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1"}' -i
+Type 2 case2a executed
+$ curl http://localhost:8989/entity -d '{"type":"type1","case":"case1c"}' -i
 HTTP/1.1 200 OK
 content-length: 15
 
-case 1 executed
+case1c executed - type 1
 ```
 
 ## Keep focus
@@ -144,8 +144,8 @@ private val entityPath = "/entity"
 private val mapper = jacksonObjectMapper()
 
 class EntityEndpointConfig(
-        private val validators: AbstractBeanRegistry<Validator>,
-        private val processors: AbstractBeanRegistry<Processor>,
+        private val validators: MapBeanRegistry<Validator>,
+        private val processors: MapBeanRegistry<Processor>,
         private val path: String = entityPath
 ) : EndpointConfig {
 
@@ -194,19 +194,20 @@ It's a simple naming convention for the bean names.  You can implement this easi
 framework.  Regardless of the DI framework, the code will resemble this:
 
 ```kotlin
-abstract class AbstractBeanRegistry<T> : SimpleMapBeanRegistry<T>() {
+interface MapBeanRegistry<T> : BeanRegistry<T> {
 
-    abstract val suffix: String
+    val map: Map<String, T>
+    val suffix: String
 
-    fun getBeanOrError(verb: String, noun: String): T =
-            getBeanOrElse(verb, noun) {
-                error("No $suffix found for verb=$verb noun=$noun")
+    fun getBeanOrError(verb: String, type: String): T =
+            getBeanOrElse(verb, type) {
+                error("No $suffix found for verb=$verb type=$type")
             }
 
-    override fun getBeanOrElse(verb: String, noun: String, default: () -> T): T =
-            getOrElse(buildString {
+    override fun getBeanOrElse(verb: String, type: String, default: () -> T): T =
+            map.getOrElse(buildString {
                 append(verb.toLowerCase())
-                append(noun.capitalize())
+                append(type.capitalize())
                 append(suffix)
             }, default)
 }
@@ -234,6 +235,11 @@ Now the product folks come along and tell you that they have a new type of messa
 
 ## Add the new feature without editing any existing code other than configuration code
 
+We write a new, one-line implementation of
+[`Processor`](src/main/kotlin/com/benjishults/exteg/Processor.kt) 
+and a new, one-line implementation of
+[`Validator`](src/main/kotlin/com/benjishults/exteg/Validator.kt).
+
 Depending on the DI framework you are using, you may not have to edit any existing code to make this work!
 
 In our DI framework, the only existing code we have to edit is
@@ -241,14 +247,9 @@ In our DI framework, the only existing code we have to edit is
 [`ProcessorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry.kt).
 I.e., configuration code that adds new beans to the context.
 
-Other than that, we write a new, one-line implementation of
-[`Processor`](src/main/kotlin/com/benjishults/exteg/Processor.kt) 
-and a new, one-line implementation of
-[`Validator`](src/main/kotlin/com/benjishults/exteg/Validator.kt).
-
 # Things to notice about our code
 
-The only `if` statement in our code is for the validation check.  (And we really don't even need an if there.)
+The only `if` statement in our code is for the validation check.  (And we really don't even need an `if` there.)
 
 We are using design patterns: Behavioral patterns (template, strategy), builder patterns (factory method).
 

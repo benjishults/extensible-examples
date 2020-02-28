@@ -23,5 +23,5 @@ class Type1Processor2Builder {
 
 class Type1Processor2(override val featureExecutors: List<FeatureExecutor>) : ExtensibleProcessor {
     override fun doMainProcessing(message: EntityDto) =
-            "case 1 executed"
+            "${message.case} executed - type 1"
 }

@@ -8,6 +8,6 @@ import com.benjishults.exteg.entity.EntityDto
  */
 object Type2Validator : Validator {
     override fun validate(message: EntityDto): Boolean {
-        return message.case == "case2"
+        return message.case.startsWith("case2")
     }
 }
