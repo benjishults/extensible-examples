@@ -1,3 +1,5 @@
+You should read [at least the beginning of this document](FactoryMethodAndTemplatePatternsInPractice.md) first for context.
+
 # Problem
 
 We learn from the business that `type1` entities need to have a new step added to their processing.
@@ -230,9 +232,10 @@ What do we have to do when the business comes along and asks us to add a new fea
 
 The only `if` statement in this new code is for the applicability check.
 
-We are using design patterns: Behavioral patterns (template, strategy), builder patterns (factory method).
-Often, the adapter pattern is used in the Delegation Event Model in order to adapt between a business logic
-class and the listener interface.
+We are using design patterns: Behavioral patterns (template, strategy) and builder patterns (factory method).
+We are using the delegation event model.  The delegation event model often uses the adapter pattern
+in order to adapt between a business logic class and the listener interface.  We just had the business
+logic class implement the listener interface directly.
 
 These patterns all take advantage polymorphism.
 

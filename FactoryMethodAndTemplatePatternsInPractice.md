@@ -256,3 +256,7 @@ We are using design patterns: Behavioral patterns (template, strategy), builder 
 These patterns all use polymorphism.
 
 (In a functional language, this simplicity in design is also possible.  It's just done a bit differently.)
+
+# Part 2
+
+See [this document for the continuation of this story](DelegationEventModelInPractice.md).
