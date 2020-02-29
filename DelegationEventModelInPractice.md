@@ -15,8 +15,8 @@ They want us to add the new features but be aware that more processing functiona
 
 ## Functional requirements
 
-1. When processing an entity of thpe `type1`, we want to execute another step that adds a line to the output: `feature 1`.
-1. When processing an entity of thpe `type1`, we want to execute another step that adds a line to the output: `feature 2`
+1. When processing an entity of type `type1`, we want to execute another step that adds a line to the output: `feature 1`.
+1. When processing an entity of type `type1`, we want to execute another step that adds a line to the output: `feature 2`
 unless the value of the `options` property contains `skipF2`.
 2. Expect more, similar requirements to come specifying added, optional features.  The optional features will
 be conditional on the `options` property of the entity.
