@@ -25,9 +25,9 @@ class Type1Processor2Spec extends Specification {
 
         where:
         options     | result
-        []          | "case 1 executed\nfeature 1\nfeature 2"
-        ["unknown"] | "case 1 executed\nfeature 1\nfeature 2"
-        ["skipF2"]  | "case 1 executed\nfeature 1"
+        []          | "case1 executed - type 1\nfeature 1\nfeature 2"
+        ["unknown"] | "case1 executed - type 1\nfeature 1\nfeature 2"
+        ["skipF2"]  | "case1 executed - type 1\nfeature 1"
     }
 
 }

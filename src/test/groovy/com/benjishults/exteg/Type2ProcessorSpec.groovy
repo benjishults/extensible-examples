@@ -17,7 +17,7 @@ class Type2ProcessorSpec extends Specification {
         given: 'a type2 payload with case: case2'
         EntityDto object = new EntityDto("type2", "case2", [])
         expect: 'processing produces required result'
-        processor.process(object) == "case 2 executed"
+        processor.process(object) == "Type 2 case2 executed"
     }
 
 }
