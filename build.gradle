@@ -51,36 +51,24 @@ compileTestGroovy {
 }
 
 dependencies {
-    //Vert.X
-    compile "io.vertx:vertx-circuit-breaker:$vertxVersion"
-    compile "io.vertx:vertx-core:$vertxVersion"
-    compile "io.vertx:vertx-web:$vertxVersion"
 
-    //Misc
-    compile "ch.qos.logback:logback-classic:$logbackVersion"
-    compile 'org.jetbrains.kotlinx:kotlinx-collections-immutable:0.1'
-    compile 'org.kodein.di:kodein-di-generic-jvm:6.3.3'
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
-
-    //Async
-    compile "io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutines"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    //Configuration
-    compile "io.vertx:vertx-config:$vertxVersion"
-    compile "io.vertx:vertx-config-yaml:$vertxVersion"
+    implementation "io.vertx:vertx-circuit-breaker:$vertxVersion"
+    implementation "io.vertx:vertx-core:$vertxVersion"
+    implementation "io.vertx:vertx-web:$vertxVersion"
+    implementation "io.vertx:vertx-lang-kotlin:$vertxVersion"
+    implementation "io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion"
+    implementation "io.vertx:vertx-config:$vertxVersion"
+    implementation "io.vertx:vertx-web-client:$vertxVersion"
 
-    // HTTP
-    compile "io.vertx:vertx-web-client:$vertxVersion"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+"
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
 
-    //Kotlin Dependencies
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    compile "io.vertx:vertx-lang-kotlin:$vertxVersion"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
 
-    //Testing
-    testCompile "org.spockframework:spock-core:$spockVersion"
+    testImplementation "org.spockframework:spock-core:$spockVersion"
 }
 
 shadowJar {
