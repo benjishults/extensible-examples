@@ -1,8 +1,8 @@
 package com.benjishults.exteg.entity.config
 
+import com.benjishults.exteg.config.PayloadValidatorBeanRegistry
 import com.benjishults.exteg.entity.case1.Type1Validator
 import com.benjishults.exteg.entity.case2.Type2Validator
-import com.benjishults.exteg.config.PayloadValidatorBeanRegistry
 
 object ValidatorsBeanRegistry : PayloadValidatorBeanRegistry() {
     init {

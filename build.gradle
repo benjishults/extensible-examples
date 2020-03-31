@@ -12,6 +12,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.28.0"
+}
+
 apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'java'
@@ -82,3 +86,85 @@ shadowJar {
 applicationDefaultJvmArgs = [
         "-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory"
 ]
+
+spotless {
+    format 'misc', {
+        target fileTree(projectDir) {
+            include '**/*.md', '**/.gitignore'
+            exclude 'build/**', '.gradle/**'
+        }
+
+        trimTrailingWhitespace()
+        indentWithSpaces() // Takes an integer argument if you don't like 4
+        endWithNewline()
+    }
+    java {
+        target fileTree(projectDir) {
+            include '**/*.java'
+            exclude 'build/**', '.gradle/**'
+        }
+        googleJavaFormat()
+        // optional: you can specify a specific version and/or switch to AOSP style
+        removeUnusedImports() // removes any unused imports
+        indentWithSpaces() // Takes an integer argument if you don't like 4
+        endWithNewline()
+    }
+    groovy {
+        target fileTree(projectDir) {
+            include '**/*.groovy', '**/*.gradle'
+            exclude 'build/**', '.gradle/**', 'build.gradle', 'src/test/**' // until we figure out how to keep Spock tables formatted
+        }
+        paddedCell() // Avoid cyclic ambiguities
+        // the Groovy Eclipse formatter extends the Java Eclipse formatter,
+        // so it formats Java files by default (unless `excludeJava` is used).
+        greclipse() // .configFile('greclipse.properties')
+        indentWithSpaces() // Takes an integer argument if you don't like 4
+        endWithNewline()
+    }
+    kotlin {
+        target fileTree(projectDir) {
+            include '**/*.kts', '**/*.kt'
+            exclude 'build/**', '.gradle/**'
+        }
+        // optionally takes a version
+        // Optional user arguments can be set
+        ktlint().userData(['disabled_rules': 'no-blank-line-before-rbrace'])
+    }
+    scala {
+        // optional: you can specify a specific version or config file
+        scalafmt() // .configFile('scalafmt.conf')
+    }
+    typescript {
+        target fileTree(projectDir) {
+            include '**/*.ts'
+            exclude 'build/**', '.gradle/**'
+        }
+        prettier()
+    }
+    format 'styling', {
+        target fileTree(projectDir) {
+            include '**/*.css', '**/*.scss'
+            exclude 'build/**', '.gradle/**'
+        }
+        // or provide both (config options take precedence over configFile options)
+        prettier() // .config(['parser': 'postcss']).configFile('path-to/.prettierrc.yml')
+    }
+    format 'javascript', {
+        target fileTree(projectDir) {
+            include '**/*.js'
+            exclude 'build/**', '.gradle/**'
+        }
+        prettier() // .config(['filepath': 'file.js'])
+    }
+    sql {
+        target fileTree(projectDir) {
+            include '**/*.sql'
+            exclude 'build/**', '.gradle/**'
+        }
+        // configFile is optional, arguments available here: https://github.com/diffplug/spotless/blob/master/lib/src/main/java/com/diffplug/spotless/sql/dbeaver/DBeaverSQLFormatterConfiguration.java
+        dbeaver() // .configFile('dbeaver.props')
+    }
+
+}
+
+build.dependsOn 'spotlessApply'

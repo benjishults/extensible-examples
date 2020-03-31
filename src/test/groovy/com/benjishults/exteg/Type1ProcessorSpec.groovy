@@ -2,7 +2,6 @@ package com.benjishults.exteg
 
 import com.benjishults.exteg.entity.EntityDto
 import com.benjishults.exteg.entity.case1.Type1Processor
-import io.vertx.core.json.JsonObject
 import spock.lang.Specification
 
 class Type1ProcessorSpec extends Specification {

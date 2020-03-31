@@ -13,9 +13,9 @@ private val entityPath = "/entity"
 private val mapper = jacksonObjectMapper()
 
 class EntityEndpointConfig(
-        private val validators: MapBeanRegistry<Validator>,
-        private val processors: MapBeanRegistry<Processor>,
-        private val path: String = entityPath
+    private val validators: MapBeanRegistry<Validator>,
+    private val processors: MapBeanRegistry<Processor>,
+    private val path: String = entityPath
 ) : EndpointConfig {
 
     override fun addRoutes(router: Router) {
@@ -28,18 +28,18 @@ class EntityEndpointConfig(
                     val processor = processors.getBeanOrError("post", entity.type)
                     val result = processor.process(entity)
                     routingContext.response()
-                            .end(result)
+                        .end(result)
                 } else {
                     routingContext.response()
-                            .setStatusCode(400)
-                            .setStatusMessage("Bad Request: Invalid payload for type ${entity.type}.")
-                            .end()
+                        .setStatusCode(400)
+                        .setStatusMessage("Bad Request: Invalid payload for type ${entity.type}.")
+                        .end()
                 }
             } catch (e: Exception) {
                 routingContext.response()
-                        .setStatusCode(422)
-                        .setStatusMessage("Unprocessable Entity: ${e.message}")
-                        .end()
+                    .setStatusCode(422)
+                    .setStatusMessage("Unprocessable Entity: ${e.message}")
+                    .end()
             }
         }
     }

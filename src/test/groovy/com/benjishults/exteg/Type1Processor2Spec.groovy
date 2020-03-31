@@ -1,7 +1,6 @@
 package com.benjishults.exteg
 
 import com.benjishults.exteg.entity.EntityDto
-import com.benjishults.exteg.entity.case1.Type1Processor
 import com.benjishults.exteg.entity.case1.Type1Processor2
 import com.benjishults.exteg.entity.config.ProcessorsBeanRegistry2
 import spock.lang.Specification

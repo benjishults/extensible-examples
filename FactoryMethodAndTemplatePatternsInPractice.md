@@ -86,7 +86,7 @@ interface Validator {
 ```
 
 We will write two implementations of each of those interfaces.
-These implementations are in 
+These implementations are in
 the [`com.benjishults.exteg.entity.case1`](src/main/kotlin/com/benjishults/exteg/entity/case1)
 and [`com.benjishults.exteg.entity.case2`](src/main/kotlin/com/benjishults/exteg/entity/case2)
 packages.  They are all the one-liners you would expect.
@@ -154,12 +154,12 @@ class EntityEndpointConfig(
         router.post(path).handler { routingContext ->
             val entity = mapper.readValue(routingContext.bodyAsString, EntityDto::class.java)
             try {
-                val validator = validators.getBeanOrError("post", entity.type)     // get validator from DI framework     
-                if (validator.validate(entity)) {                                  // validate                            
+                val validator = validators.getBeanOrError("post", entity.type)     // get validator from DI framework
+                if (validator.validate(entity)) {                                  // validate
                     val processor = processors.getBeanOrError("post", entity.type) // get processor from DI framework
-                    val result = processor.process(entity)                         // process                        
-                    routingContext.response()                                      
-                            .end(result)                                           
+                    val result = processor.process(entity)                         // process
+                    routingContext.response()
+                            .end(result)
                 } else {
                     routingContext.response()
                             .setStatusCode(400)
@@ -236,14 +236,14 @@ Now the product folks come along and tell you that they have a new type of messa
 ## Add the new feature without editing any existing code other than configuration code
 
 We write a new, one-line implementation of
-[`Processor`](src/main/kotlin/com/benjishults/exteg/Processor.kt) 
+[`Processor`](src/main/kotlin/com/benjishults/exteg/Processor.kt)
 and a new, one-line implementation of
 [`Validator`](src/main/kotlin/com/benjishults/exteg/Validator.kt).
 
 Depending on the DI framework you are using, you may not have to edit any existing code to make this work!
 
 In our DI framework, the only existing code we have to edit is
-[`ValidatorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ValidationsBeanRegistry.kt) and 
+[`ValidatorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ValidationsBeanRegistry.kt) and
 [`ProcessorsBeanRegistry`](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry.kt).
 I.e., configuration code that adds new beans to the context.
 

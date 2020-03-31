@@ -5,5 +5,5 @@ import com.benjishults.exteg.entity.EntityDto
 
 object Type1Processor : Processor {
     override fun process(message: EntityDto) =
-            "${message.case} executed - type 1"
+        "${message.case} executed - type 1"
 }

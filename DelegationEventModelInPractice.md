@@ -74,7 +74,7 @@ It consists of
 The event source (producer) allows implementations of the listener interface (the consumers) to register interest in its events.
 When the event occurs in the event source, it notifies all listeners (broadcasts to the topic).
 
-In our case, 
+In our case,
 
 1. the event source will be the processor
 2. the listener interface will be called [`FeatureExecutor`](src/main/kotlin/com/benjishults/exteg/FeatureExecutor.kt)

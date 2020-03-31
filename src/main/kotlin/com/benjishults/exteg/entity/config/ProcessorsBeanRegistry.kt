@@ -1,8 +1,8 @@
 package com.benjishults.exteg.entity.config
 
+import com.benjishults.exteg.config.PayloadProcessorBeanRegistry
 import com.benjishults.exteg.entity.case1.Type1Processor
 import com.benjishults.exteg.entity.case2.Type2Processor
-import com.benjishults.exteg.config.PayloadProcessorBeanRegistry
 
 object ProcessorsBeanRegistry : PayloadProcessorBeanRegistry() {
     init {

@@ -2,7 +2,6 @@ package com.benjishults.exteg.entity.case1
 
 import com.benjishults.exteg.ExtensibleProcessor
 import com.benjishults.exteg.FeatureExecutor
-import com.benjishults.exteg.Processor
 import com.benjishults.exteg.entity.EntityDto
 
 class Type1Processor2Builder {
@@ -23,5 +22,5 @@ class Type1Processor2Builder {
 
 class Type1Processor2(override val featureExecutors: List<FeatureExecutor>) : ExtensibleProcessor {
     override fun doMainProcessing(message: EntityDto) =
-            "${message.case} executed - type 1"
+        "${message.case} executed - type 1"
 }

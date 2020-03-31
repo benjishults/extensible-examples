@@ -8,12 +8,13 @@ import io.vertx.core.http.HttpServerOptions
 
 fun main() {
     val vertx: Vertx = Vertx.vertx()
-    vertx.createHttpServer(HttpServerOptions()
+    vertx.createHttpServer(
+        HttpServerOptions()
             .setHost("localhost")
             .setPort(8989)
     ).requestHandler { request ->
         EntityEndpointConfig(ValidatorsBeanRegistry, ProcessorsBeanRegistry)
-                .router(vertx)
-                .handle(request)
+            .router(vertx)
+            .handle(request)
     }.listen()
 }

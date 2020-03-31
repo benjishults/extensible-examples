@@ -2,9 +2,7 @@ package com.benjishults.exteg
 
 import com.benjishults.exteg.entity.EntityDto
 import com.benjishults.exteg.entity.case2.Type2Validator
-import io.vertx.core.json.JsonObject
 import spock.lang.Specification
-import spock.lang.Subject
 
 class Type2ValidatorSpec extends Specification {
 

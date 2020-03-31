@@ -17,16 +17,16 @@ interface ExtensibleProcessor : Processor {
     fun doMainProcessing(message: EntityDto): String
 
     private fun onEntityProcessed(message: EntityDto, seed: String) =
-            featureExecutors.fold(seed) { onGoingValue, executor ->
-                try {
-                    if (executor.isApplicable(message.options))
-                        executor.executeFeature(message, onGoingValue)
-                    else
-                        onGoingValue
-                } catch (e: Exception) {
-                    println(e.message)
+        featureExecutors.fold(seed) { onGoingValue, executor ->
+            try {
+                if (executor.isApplicable(message.options))
+                    executor.executeFeature(message, onGoingValue)
+                else
                     onGoingValue
-                }
+            } catch (e: Exception) {
+                println(e.message)
+                onGoingValue
             }
+        }
 
 }
