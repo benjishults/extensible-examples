@@ -26,6 +26,9 @@ be conditional on the `options` property of the entity.
 1. Design in a way that anticipates additional optional features that may be conditional
 on the `options` property of the entity.
 
+For us, this means that we will be able to add new, optional features without editing any existing code except,
+possibly, configuration code.
+
 # Solution
 
 After this change, we want to see this:
@@ -109,7 +112,7 @@ will always be based on the `options` property of the message so we only pass th
 Here are the two feature implementations:
 
 ```kotlin
-class Feature1Executor : FeatureExecutor{
+class Feature1Executor : FeatureExecutor {
 
     override fun executeFeature(obj: EntityDto, value: String) =
             "$value\nfeature 1"
@@ -227,6 +230,9 @@ What do we have to do when the business comes along and asks us to add a new fea
 1. Write a new implementation of [`FeatureExecutor`](src/main/kotlin/com/benjishults/exteg/FeatureExecutor.kt)
 2. Register that new instance with the `Type1Processor2` in
 [configuration code](src/main/kotlin/com/benjishults/exteg/entity/config/ProcessorsBeanRegistry2.kt)
+
+Notice that we do not edit any existing code except, depending on the DI framework and how we use it,
+configuration code.
 
 # Things to notice about our code
 

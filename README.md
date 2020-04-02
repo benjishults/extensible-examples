@@ -2,6 +2,11 @@
 
 Sample code demonstrating some ideas that help build solutions that are extremely easy to extend.
 
+## Extensible code
+
+We call code "extensible" if features can be added without editing any existing code except,
+possibly, configuration code.
+
 ## Adding types
 
 To add a new type, simply implement the `Processor` and `Validator` interfaces and add those beans

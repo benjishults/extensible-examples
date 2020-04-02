@@ -22,6 +22,9 @@ For the sake of keeping the details very simple, let's say we get these business
 with their own validation and processing requirements,
 being possible in the future.
 
+For us, this means that we will be able to add new types without editing any existing code except,
+possibly, configuration code.
+
 # Solution
 
 We decide to use HTTP POST to allow clients to send us the entities.  The payload will [look like this](src/main/kotlin/com/benjishults/exteg/entity/EntityDto.kt):
