@@ -68,10 +68,13 @@ edit the existing file.)
 
 The Delegation Event Model is basically an implementation of a topic inside a single JVM.  But the
 consumers and producers are just objects in memory.
+
+It is a combination of several, well-known patterns.  It borrows most from the Observer pattern.
+
 It consists of
 
-1. an event source (the producer)
-2. a listener interface and any number of implementations (the consumers)
+1. an event source (the *producer* or *observable*)
+2. a listener interface and any number of implementations (the *consumers* or *observers*)
 3. an event type (the message type)
 
 The event source (producer) allows implementations of the listener interface (the consumers) to register interest in its events.
